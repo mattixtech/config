@@ -1,0 +1,59 @@
+" Emulated VIM plugins
+set NERDTree
+set surround
+set commentary
+set ReplaceWithRegister
+set exchange
+set argtextobj
+set textobj-entire
+set textobj-indent
+set highlightedyank
+set vim-paragraph-motion
+set matchit
+
+" Plugin options
+let g:highlightedyank_highlight_duration = 500
+let g:argtextobj_pairs="[:],(:),<:>"
+
+" Vim options
+set clipboard="unnamedplus"
+set number
+set incsearch
+set hlsearch
+set ignorecase
+set smartcase
+set scrolloff=8
+set visualbell
+
+" Idea options
+set idearefactormode=select
+set ideajoin
+
+" Regular mappings
+let mapleader=" "
+nnoremap <SPACE> <Nop>
+nnoremap <leader><leader> :nohlsearch<CR>
+nnoremap j gj
+nnoremap k gk
+nnoremap s :action KJumpAction<CR>
+nmap <S-Enter> O<Esc>j
+nmap <CR> o<Esc>k
+
+" Idea mappings
+" Code
+nmap <leader>cr <Action>(RenameElement)
+nmap <leader>ci <Action>(ImplementMethods)
+nmap <leader>ca <Action>(ShowIntentionActions)
+" Navigate
+nmap <leader>nu <Action>(FindUsages)
+nmap <leader>nd <Action>(GotoDeclaration)
+nmap <leader>ni <Action>(GotoImplementation)
+nmap <C-o> <Action>(Back)
+nmap <C-i> <Action>(Forward)
+" Quick
+nmap <leader>qt <Action>(QuickTypeDefinition)
+nmap <leader>qd <Action>(QuickJavaDoc)
+nmap <leader>qe <Action>(ShowErrorDescription)
+" General
+nmap <leader>e <Action>(SelectInProjectView)
+nmap <leader>b <Action>(Annotate)
