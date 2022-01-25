@@ -34,7 +34,9 @@ keymap("n", "<S-h>", ":bprevious<CR>", opts)
 keymap("n", "<leader><leader>", ":edit #<cr>", opts)
 
 -- Quick
-keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
+-- keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
+keymap("n", "<leader>e", ":Sex<cr>", opts)
+keymap("n", "<leader>E", ":sp .<cr>", opts)
 keymap("n", "<leader>w", ":w<cr>", opts)
 keymap("n", "<leader>q", ":q<cr>", opts)
 keymap("n", "<leader>c", ":Bdelete<cr>", opts)

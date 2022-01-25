@@ -40,7 +40,6 @@ packer.init {
 
 return packer.startup(function(use)
   use "wbthomason/packer.nvim"
-  use "nvim-lua/popup.nvim"
   use "nvim-lua/plenary.nvim"
   use "windwp/nvim-autopairs"
   use "numToStr/Comment.nvim"
@@ -59,6 +58,7 @@ return packer.startup(function(use)
   use "abecodes/tabout.nvim"
   use "tami5/lspsaga.nvim"
   use "lewis6991/spellsitter.nvim"
+  -- use "nvim-lua/popup.nvim"
   -- use "kyazdani42/nvim-tree.lua"
   -- use "akinsho/bufferline.nvim"
   -- use "goolord/alpha-nvim"
@@ -69,10 +69,10 @@ return packer.startup(function(use)
 
   -- cmp plugins
   use "hrsh7th/nvim-cmp"
+  use "hrsh7th/cmp-nvim-lsp"
   use "hrsh7th/cmp-buffer"
   use "hrsh7th/cmp-path"
   use "saadparwaiz1/cmp_luasnip"
-  use "hrsh7th/cmp-nvim-lsp"
   -- use "hrsh7th/cmp-cmdline"
 
   -- snippets
