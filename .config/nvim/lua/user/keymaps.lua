@@ -2,18 +2,10 @@ local opts = { noremap = true, silent = true }
 local term_opts = { silent = true }
 local keymap = vim.api.nvim_set_keymap
 
---Remap space as leader key
+-- Remap space as leader key
 keymap("", "<Space>", "<Nop>", opts)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
-
--- Modes
---   normal_mode = "n",
---   insert_mode = "i",
---   visual_mode = "v",
---   visual_block_mode = "x",
---   term_mode = "t",
---   command_mode = "c",
 
 -- Normal --
 -- Better window navigation
@@ -35,10 +27,11 @@ keymap("n", "<leader><leader>", ":edit #<cr>", opts)
 
 -- Quick
 -- keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
-keymap("n", "<leader>e", ":Sex<cr>", opts)
-keymap("n", "<leader>E", ":sp .<cr>", opts)
+keymap("n", "<leader>e", ":Explore<cr>", opts)
+keymap("n", "<leader>E", ":Explore .<cr>", opts)
 keymap("n", "<leader>w", ":w<cr>", opts)
 keymap("n", "<leader>q", ":q<cr>", opts)
+keymap("n", "<leader>Q", ":%bd|e#<cr>", opts)
 keymap("n", "<leader>c", ":Bdelete<cr>", opts)
 keymap("n", "<leader>C", ":tabclose<cr>", opts)
 keymap("n", "<leader>h", ":nohlsearch<cr>", opts)
@@ -49,8 +42,8 @@ keymap("n", "<leader>O", ":tabonly!<cr>", opts)
 
 -- Git
 -- keymap("n", "<leader>gg", ":Neogit kind=replace<cr>", opts)
-keymap("n", "<leader>gg", ":Git<cr>", opts)
 -- keymap("n", "<leader>gG", ":Git<cr>", opts)
+keymap("n", "<leader>gg", ":Git<cr>", opts)
 keymap("n", "<leader>gb", ":Git blame<cr>", opts)
 keymap("n", "<leader>gp", ":lua require 'gitsigns'.preview_hunk()<cr>", opts)
 keymap("n", "<leader>gr", ":lua require 'gitsigns'.reset_hunk()<cr>", opts)
