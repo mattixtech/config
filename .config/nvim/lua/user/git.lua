@@ -1,13 +1,13 @@
-local neogit = require('neogit')
-
-neogit.setup({
-    commit_popup = {
-        kind = "split",
-    },
-    integrations = {
-        diffview = true,
-    },
-})
+-- local neogit = require('neogit')
+--
+-- neogit.setup({
+--     commit_popup = {
+--         kind = "split",
+--     },
+--     integrations = {
+--         diffview = true,
+--     },
+-- })
 
 local cb = require'diffview.config'.diffview_callback
 

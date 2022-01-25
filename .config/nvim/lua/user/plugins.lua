@@ -45,13 +45,10 @@ return packer.startup(function(use)
   use "windwp/nvim-autopairs"
   use "numToStr/Comment.nvim"
   use "kyazdani42/nvim-web-devicons"
-  use "kyazdani42/nvim-tree.lua"
-  use "akinsho/bufferline.nvim"
   use "moll/vim-bbye"
   use "nvim-lualine/lualine.nvim"
   use "ahmedkhalf/project.nvim"
   use "lewis6991/impatient.nvim"
-  use "goolord/alpha-nvim"
   use "antoinemadec/FixCursorHold.nvim" -- This is needed to fix lsp doc highlight
   use "blackCauldron7/surround.nvim"
   use "wellle/targets.vim"
@@ -62,6 +59,11 @@ return packer.startup(function(use)
   use "abecodes/tabout.nvim"
   use "tami5/lspsaga.nvim"
   use "lewis6991/spellsitter.nvim"
+  -- use "kyazdani42/nvim-tree.lua"
+  -- use "akinsho/bufferline.nvim"
+  -- use "goolord/alpha-nvim"
+  -- use "ellisonleao/glow.nvim"
+
   -- Colorschemes
   use "Mofiqul/dracula.nvim"
 
@@ -69,10 +71,9 @@ return packer.startup(function(use)
   use "hrsh7th/nvim-cmp"
   use "hrsh7th/cmp-buffer"
   use "hrsh7th/cmp-path"
-  use "hrsh7th/cmp-cmdline"
   use "saadparwaiz1/cmp_luasnip"
   use "hrsh7th/cmp-nvim-lsp"
-  use "ellisonleao/glow.nvim"
+  -- use "hrsh7th/cmp-cmdline"
 
   -- snippets
   use "L3MON4D3/LuaSnip"
@@ -81,9 +82,9 @@ return packer.startup(function(use)
   -- LSP
   use "neovim/nvim-lspconfig"
   use "williamboman/nvim-lsp-installer"
-  -- use "jose-elias-alvarez/null-ls.nvim"
   use "simrat39/rust-tools.nvim"
   use "arkav/lualine-lsp-progress"
+  -- use "jose-elias-alvarez/null-ls.nvim"
 
   -- Telescope
   use "nvim-telescope/telescope.nvim"
@@ -99,10 +100,10 @@ return packer.startup(function(use)
 
   -- Git
   use "lewis6991/gitsigns.nvim"
-  use "sindrets/diffview.nvim"
-  use "TimUntersberger/neogit"
   use "tpope/vim-fugitive"
+  use "sindrets/diffview.nvim"
   use "junegunn/gv.vim"
+  -- use "TimUntersberger/neogit"
 
   if PACKER_BOOTSTRAP then
     require("packer").sync()
