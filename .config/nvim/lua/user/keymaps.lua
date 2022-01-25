@@ -27,8 +27,8 @@ keymap("n", "<leader><leader>", ":edit #<cr>", opts)
 
 -- Quick
 -- keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
-keymap("n", "<leader>e", ":Explore<cr>", opts)
-keymap("n", "<leader>E", ":Explore .<cr>", opts)
+keymap("n", "<leader>e", ":Lexplore %:h<cr>", opts)
+keymap("n", "<leader>E", ":Lexplore .<cr>", opts)
 keymap("n", "<leader>w", ":w<cr>", opts)
 keymap("n", "<leader>q", ":q<cr>", opts)
 keymap("n", "<leader>Q", ":%bd|e#<cr>", opts)
