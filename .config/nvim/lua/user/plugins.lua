@@ -58,11 +58,6 @@ return packer.startup(function(use)
   use "abecodes/tabout.nvim"
   use "tami5/lspsaga.nvim"
   use "lewis6991/spellsitter.nvim"
-  -- use "nvim-lua/popup.nvim"
-  -- use "kyazdani42/nvim-tree.lua"
-  -- use "akinsho/bufferline.nvim"
-  -- use "goolord/alpha-nvim"
-  -- use "ellisonleao/glow.nvim"
 
   -- Colorschemes
   use "Mofiqul/dracula.nvim"
@@ -73,11 +68,9 @@ return packer.startup(function(use)
   use "hrsh7th/cmp-buffer"
   use "hrsh7th/cmp-path"
   use "saadparwaiz1/cmp_luasnip"
-  -- use "hrsh7th/cmp-cmdline"
 
   -- snippets
   use "L3MON4D3/LuaSnip"
-  -- use "rafamadriz/friendly-snippets"
 
   -- LSP
   use "neovim/nvim-lspconfig"
@@ -102,8 +95,6 @@ return packer.startup(function(use)
   use "lewis6991/gitsigns.nvim"
   use "tpope/vim-fugitive"
   use "junegunn/gv.vim"
-  -- use "sindrets/diffview.nvim"
-  -- use "TimUntersberger/neogit"
 
   if PACKER_BOOTSTRAP then
     require("packer").sync()

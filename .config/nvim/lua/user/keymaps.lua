@@ -47,6 +47,8 @@ keymap("n", "<leader>gr", ":lua require 'gitsigns'.reset_hunk()<cr>", opts)
 keymap("n", "<leader>gR", ":lua require 'gitsigns'.reset_buffer()<cr>", opts)
 keymap("n", "<leader>gd", ":Gvdiffsplit<cr>", opts)
 keymap("n", "<leader>gu", ":Git pull --rebase<cr>", opts)
+keymap("n", "<leader>gD", ":Git difftool<cr>", opts)
+keymap("n", "<leader>gM", ":Git mergetool<cr>", opts)
 
 -- Search via Telescope
 keymap("n", "<leader>tr", ":Telescope oldfiles previwer=false<cr>", opts)
@@ -64,5 +66,4 @@ keymap("n", "<leader>tG", ":Telescope git_stash<cr>", opts)
 -- Stay in indent mode
 keymap("v", "<", "<gv", opts)
 keymap("v", ">", ">gv", opts)
-
 
