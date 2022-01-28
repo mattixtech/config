@@ -77,7 +77,7 @@ return packer.startup(function(use)
 
   -- snippets
   use "L3MON4D3/LuaSnip"
-  use "rafamadriz/friendly-snippets"
+  -- use "rafamadriz/friendly-snippets"
 
   -- LSP
   use "neovim/nvim-lspconfig"
@@ -101,8 +101,8 @@ return packer.startup(function(use)
   -- Git
   use "lewis6991/gitsigns.nvim"
   use "tpope/vim-fugitive"
-  use "sindrets/diffview.nvim"
   use "junegunn/gv.vim"
+  -- use "sindrets/diffview.nvim"
   -- use "TimUntersberger/neogit"
 
   if PACKER_BOOTSTRAP then
