@@ -26,8 +26,7 @@ keymap("n", "<S-h>", ":bprevious<CR>", opts)
 keymap("n", "<leader><leader>", ":edit #<cr>", opts)
 
 -- Quick
-keymap("n", "<leader>e", ":Lexplore %:h<cr>", opts)
-keymap("n", "<leader>E", ":Lexplore .<cr>", opts)
+keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
 keymap("n", "<leader>w", ":w<cr>", opts)
 keymap("n", "<leader>q", ":q<cr>", opts)
 keymap("n", "<leader>Q", ":%bd|e#<cr>", opts)
@@ -46,9 +45,6 @@ keymap("n", "<leader>gp", ":lua require 'gitsigns'.preview_hunk()<cr>", opts)
 keymap("n", "<leader>gr", ":lua require 'gitsigns'.reset_hunk()<cr>", opts)
 keymap("n", "<leader>gR", ":lua require 'gitsigns'.reset_buffer()<cr>", opts)
 keymap("n", "<leader>gd", ":Gvdiffsplit<cr>", opts)
-keymap("n", "<leader>gu", ":Git pull --rebase<cr>", opts)
-keymap("n", "<leader>gD", ":Git difftool<cr>", opts)
-keymap("n", "<leader>gM", ":Git mergetool<cr>", opts)
 
 -- Search via Telescope
 keymap("n", "<leader>tr", ":Telescope oldfiles previwer=false<cr>", opts)
@@ -59,7 +55,7 @@ keymap("n", "<leader>tF", ":Telescope live_grep<cr>", opts)
 keymap("n", "<leader>tp", ":Telescope projects<cr>", opts)
 keymap("n", "<leader>tk", ":Telescope keymaps<cr>", opts)
 keymap("n", "<leader>tb", ":Telescope buffers<cr>", opts)
-keymap("n", "<leader>tB", ":Telescope git_branches previwer=false<cr>", opts)
+keymap("n", "<leader>tB", ":Telescope git_branches previewer=false<cr>", opts)
 keymap("n", "<leader>tG", ":Telescope git_stash<cr>", opts)
 
 -- Visual --

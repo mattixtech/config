@@ -58,6 +58,8 @@ return packer.startup(function(use)
   use "abecodes/tabout.nvim"
   use "tami5/lspsaga.nvim"
   use "lewis6991/spellsitter.nvim"
+  use "kyazdani42/nvim-tree.lua"
+  use "akinsho/bufferline.nvim"
 
   -- Colorschemes
   use "Mofiqul/dracula.nvim"
@@ -94,7 +96,7 @@ return packer.startup(function(use)
   -- Git
   use "lewis6991/gitsigns.nvim"
   use "tpope/vim-fugitive"
-  use "junegunn/gv.vim"
+  -- use "junegunn/gv.vim"
 
   if PACKER_BOOTSTRAP then
     require("packer").sync()
