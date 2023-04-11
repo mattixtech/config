@@ -20,6 +20,8 @@ local lazy_plugins = {
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
   'tpope/vim-sleuth',
+  'mbbill/undotree',
+  'kevinhwang91/nvim-bqf',
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -104,13 +106,6 @@ local lazy_plugins = {
     end,
   },
   {
-    'ggandor/leap.nvim',
-    dependencies = { 'tpope/vim-repeat' },
-    config = function()
-      require('leap').add_default_mappings()
-    end
-  },
-  {
     "kylechui/nvim-surround",
     version = "*",
     event = "VeryLazy",
@@ -119,48 +114,10 @@ local lazy_plugins = {
     end
   },
   {
-    "RRethy/vim-illuminate"
-  },
-  {
     "windwp/nvim-autopairs",
     config = function()
       require("nvim-autopairs").setup {}
     end,
-  },
-  {
-    "saecki/crates.nvim",
-    event = { "BufRead Cargo.toml" },
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-        require('crates').setup()
-    end,
-  },
-  {
-    "ellisonleao/glow.nvim", config = true, cmd = "Glow"
-  },
-  {
-    "glepnir/lspsaga.nvim",
-    event = "LspAttach",
-    config = function()
-        require("lspsaga").setup({
-        lightbulb = {
-          virtual_text = false,
-        },
-        beacon = {
-          enable = false,
-        },
-      })
-    end,
-    dependencies = {
-      {"nvim-tree/nvim-web-devicons"},
-      {"nvim-treesitter/nvim-treesitter"}
-    }
-  },
-  {
-    "kevinhwang91/nvim-bqf"
-  },
-  {
-    "simrat39/rust-tools.nvim"
   },
 }
 require('lazy').setup(lazy_plugins , {})
@@ -276,42 +233,30 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
-  -- LSP Saga
-  -- nmap('<leader>rn', ":Lspsaga rename<cr>", '[R]e[n]ame')
-  -- nmap('<leader>ca', ":Lspsaga code_action<cr>", '[C]ode [A]ction')
-  -- nmap('K', ":Lspsaga hover_doc<cr>", 'Hover doc')
-  -- nmap('gp', ":Lspsaga peek_definition<cr>", 'Peek definition')
-  -- nmap('gP', ":Lspsaga peek_type_definition<cr>", 'Peek type definition')
-  -- nmap('gh', ":Lspsaga lsp_finder<cr>", 'LSP Finder')
-  nmap('<leader>o', ":Lspsaga outline<cr>", '[O]utline')
-
-  nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-  nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-
   nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
   nmap('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementations')
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
   nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+  nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
   nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
   nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
   nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-
-  -- See `:help K` for why this keymap
-  nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
-
-  -- Lesser used LSP functionality
-  nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+  nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+  nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
   nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
   nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
   nmap('<leader>wl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
-  -- Create a command `:Format` local to the LSP buffer
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    vim.lsp.buf.format()
-  end, { desc = 'Format current buffer with LSP' })
+  -- See `:help K` for why this keymap
+  nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+
+  -- -- Create a command `:Format` local to the LSP buffer
+  -- vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+  --   vim.lsp.buf.format()
+  -- end, { desc = 'Format current buffer with LSP' })
 end
 
 local servers = {
@@ -344,37 +289,6 @@ mason_lspconfig.setup_handlers {
     }
   end,
 }
-
--- Rust tools
-local rt = require("rust-tools")
-
-rt.setup({
-  tools = {
-    inlay_hints = {
-      auto = false,
-      show_parameter_hints = false,
-    },
-  },
-  server = {
-    standalone = true,
-    settings = {
-      ["rust-analyzer"] = {
-        checkOnSave = {
-          command = "clippy",
-        },
-      },
-    },
-    on_attach = function(x, bufnr)
-      vim.keymap.set("n", "<Leader>k", rt.hover_actions.hover_actions, { desc = 'Rust Hover', buffer = bufnr })
-      vim.keymap.set("n", "<Leader>Rm", rt.expand_macro.expand_macro, { desc = 'Expand [R]ust [M]acro', buffer = bufnr })
-      vim.keymap.set("n", "<Leader>Rr", rt.runnables.runnables, { desc = '[R]ust [R]unnables', buffer = bufnr })
-      vim.keymap.set("n", "<Leader>Rj", rt.join_lines.join_lines, { desc = '[R]ust [J]oin Lines', buffer = bufnr })
-      vim.keymap.set("n", "<Leader>Ri", rt.inlay_hints.enable, { desc = '[R]ust [I]nlay hints on', buffer = bufnr })
-      vim.keymap.set("n", "<Leader>RI", rt.inlay_hints.disable, { desc = '[R]ust [I]nlay hints off', buffer = bufnr })
-      on_attach(x, bufnr)
-    end,
-  },
-})
 
 -- diag
 vim.diagnostic.config({
@@ -459,11 +373,10 @@ vim.keymap.set("v", ">", ">gv", { noremap = true, silent = true })
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic message" })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Go to next diagnostic message" })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
--- vim.keymap.set('n', '<leader>q', ":TroubleToggle<cr>", { desc = "Diagnostics list" })
 
 -- Plugin keymaps
-vim.keymap.set('n', '<leader>t', ":Lspsaga term_toggle<cr>", { desc = '[T]erminal' })
-vim.keymap.set('t', "<Esc>", "<C-\\><C-n>:q<CR>")
+vim.keymap.set('t', "<Esc>", "<C-\\><C-n>")
+vim.keymap.set('n', '<leader>u', ":UndotreeToggle<cr>", { desc = '[U]ndo Tree' })
 -- telescope
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
