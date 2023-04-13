@@ -18,7 +18,6 @@ vim.opt.rtp:prepend(lazypath)
 
 local lazy_plugins = {
   'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
   'tpope/vim-sleuth',
   'mbbill/undotree',
   'kevinhwang91/nvim-bqf',
@@ -67,8 +66,8 @@ local lazy_plugins = {
       },
       sections = {
         lualine_a = {'mode'},
-        lualine_b = {'buffers'},
-        lualine_c = {'branch', 'diff', 'diagnostics'},
+        lualine_b = {'branch', 'diff', 'diagnostics'},
+        lualine_c = {'buffers'},
         lualine_x = {'encoding', 'fileformat', 'filetype'},
         lualine_y = {'progress'},
         lualine_z = {'location'}
@@ -253,10 +252,10 @@ local on_attach = function(_, bufnr)
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
   nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
-  -- -- Create a command `:Format` local to the LSP buffer
-  -- vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-  --   vim.lsp.buf.format()
-  -- end, { desc = 'Format current buffer with LSP' })
+  -- Create a command `:Format` local to the LSP buffer
+  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+    vim.lsp.buf.format()
+  end, { desc = 'Format current buffer with LSP' })
 end
 
 local servers = {
@@ -394,8 +393,9 @@ vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
-vim.keymap.set('n', '<leader>sS', require('telescope.builtin').git_status, { desc = '[S]earch Git [S]tatus' })
+vim.keymap.set('n', '<leader>ss', require('telescope.builtin').git_status, { desc = '[S]earch Git [S]tatus' })
 vim.keymap.set('n', '<leader>sB', require('telescope.builtin').git_branches, { desc = '[S]earch Git [B]ranches' })
-vim.keymap.set('n', '<leader>sO', require('telescope.builtin').git_bcommits, { desc = '[S]earch Git Branch C[O]mmits' })
-vim.keymap.set('n', '<leader>sC', require('telescope.builtin').git_commits, { desc = '[S]earch Git [C]ommits' })
-vim.keymap.set('n', '<leader>sT', require('telescope.builtin').git_stash, { desc = '[S]earch Git S[T]ash' })
+
+-- git signs
+vim.keymap.set('n', '<leader>gp', ":Gitsigns preview_hunk<cr>", { desc = '[G]it [P]review Hunk' })
+vim.keymap.set('n', '<leader>gr', ":Gitsigns reset_hunk<cr>", { desc = '[G]it [R]eset Hunk' })
