@@ -61,14 +61,27 @@ local lazy_plugins = {
       options = {
         icons_enabled = false,
         theme = 'dracula',
-        component_separators = '|',
+        component_separators = '',
         section_separators = '',
       },
       sections = {
         lualine_a = {'mode'},
         lualine_b = {'branch', 'diff', 'diagnostics'},
-        lualine_c = {'buffers'},
-        lualine_x = {'encoding', 'fileformat', 'filetype'},
+        lualine_c = {
+          {
+            'buffers',
+            mode = 2,
+            buffers_color = {
+              active = '',
+            },
+            symbols = {
+              modified = ' ●',      -- Text to show when the buffer is modified
+              alternate_file = '', -- Text to show to identify the alternate file
+              directory =  '',     -- Text to show when the buffer is a directory
+            },
+          },
+        },
+        lualine_x = {'filetype'},
         lualine_y = {'progress'},
         lualine_z = {'location'}
       },
