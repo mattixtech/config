@@ -369,6 +369,7 @@ vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = tr
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>x", ":Vexplore<cr>", { desc = 'E[X]plore', noremap = true, silent = true })
 -- Resize with arrows
 vim.keymap.set("n", "<A-Up>", ":resize +2<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<A-Down>", ":resize -2<CR>", { noremap = true, silent = true })
@@ -410,5 +411,7 @@ vim.keymap.set('n', '<leader>ss', require('telescope.builtin').git_status, { des
 vim.keymap.set('n', '<leader>sB', require('telescope.builtin').git_branches, { desc = '[S]earch Git [B]ranches' })
 
 -- git signs
+vim.keymap.set('n', '<leader>gg', ":Git<cr>", { desc = '[G]it' })
+vim.keymap.set('n', '<leader>gd', ":Gvdiffsplit<cr>", { desc = '[G]it [D]iffsplit' })
 vim.keymap.set('n', '<leader>gp', ":Gitsigns preview_hunk<cr>", { desc = '[G]it [P]review Hunk' })
 vim.keymap.set('n', '<leader>gr', ":Gitsigns reset_hunk<cr>", { desc = '[G]it [R]eset Hunk' })
