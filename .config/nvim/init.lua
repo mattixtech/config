@@ -69,16 +69,9 @@ local lazy_plugins = {
         lualine_b = {'branch', 'diff', 'diagnostics'},
         lualine_c = {
           {
-            'buffers',
-            mode = 2,
-            buffers_color = {
-              active = '',
-            },
-            symbols = {
-              modified = ' ●',      -- Text to show when the buffer is modified
-              alternate_file = '', -- Text to show to identify the alternate file
-              directory =  '',     -- Text to show when the buffer is a directory
-            },
+            'filename',
+            path = 1,
+            shorting_target = 60,
           },
         },
         lualine_x = {'filetype'},
@@ -246,22 +239,19 @@ local on_attach = function(_, bufnr)
   end
 
   nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+  nmap('gD', vim.lsp.buf.type_definition, '[G]oto Type [D]efinition')
   nmap('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementations')
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-  nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-  nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-  nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
   nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
   nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-  nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  nmap('<leader>wl', function()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, '[W]orkspace [L]ist Folders')
+  -- nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+  -- nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+  -- nmap('<leader>wl', function()
+  --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+  -- end, '[W]orkspace [L]ist Folders')
 
-  -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
   nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
@@ -369,15 +359,17 @@ vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = tr
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true, silent = true })
+vim.keymap.set("n", "<C-o>", "<C-o>zz", { noremap = true, silent = true })
+vim.keymap.set("n", "<C-i>", "<C-i>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>x", ":Vexplore<cr>", { desc = 'E[X]plore', noremap = true, silent = true })
 -- Resize with arrows
 vim.keymap.set("n", "<A-Up>", ":resize +2<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<A-Down>", ":resize -2<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<A-Left>", ":vertical resize +2<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<A-Right>", ":vertical resize -2<CR>", { noremap = true, silent = true })
--- Navigate buffers
-vim.keymap.set("n", "<S-l>", ":bnext<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<S-h>", ":bprevious<CR>", { noremap = true, silent = true })
+-- -- Navigate buffers
+-- vim.keymap.set("n", "<S-l>", ":bnext<CR>", { noremap = true, silent = true })
+-- vim.keymap.set("n", "<S-h>", ":bprevious<CR>", { noremap = true, silent = true })
 -- Stay in indent mode
 vim.keymap.set("v", "<", "<gv", { noremap = true, silent = true })
 vim.keymap.set("v", ">", ">gv", { noremap = true, silent = true })
@@ -399,7 +391,6 @@ vim.keymap.set('n', '<leader>/', function()
     previewer = false,
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
-vim.keymap.set('n', '<leader>sb', require('telescope.builtin').buffers, { desc = '[S]earch [B]uffers' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').registers, { desc = '[S]earch [R]egisters' })
 vim.keymap.set('n', '<leader>sj', require('telescope.builtin').jumplist, { desc = '[S]earch [J]umplist' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
@@ -408,10 +399,10 @@ vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { de
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>ss', require('telescope.builtin').git_status, { desc = '[S]earch Git [S]tatus' })
-vim.keymap.set('n', '<leader>sB', require('telescope.builtin').git_branches, { desc = '[S]earch Git [B]ranches' })
+vim.keymap.set('n', '<leader>sb', require('telescope.builtin').git_branches, { desc = '[S]earch Git [B]ranches' })
 
 -- git signs
-vim.keymap.set('n', '<leader>gg', ":Git<cr>", { desc = '[G]it' })
-vim.keymap.set('n', '<leader>gd', ":Gvdiffsplit<cr>", { desc = '[G]it [D]iffsplit' })
 vim.keymap.set('n', '<leader>gp', ":Gitsigns preview_hunk<cr>", { desc = '[G]it [P]review Hunk' })
 vim.keymap.set('n', '<leader>gr', ":Gitsigns reset_hunk<cr>", { desc = '[G]it [R]eset Hunk' })
+vim.keymap.set('n', '<leader>gl', ":Gitsigns next_hunk<cr>", { desc = '[G]it Next Hunk' })
+vim.keymap.set('n', '<leader>gh', ":Gitsigns previous_hunk<cr>", { desc = '[G]it Previous Hunk' })
