@@ -2,6 +2,18 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.wo.relativenumber = true
 
+-- Spelling configuration
+vim.opt.spell = false
+vim.opt.spelllang = {"en_us", "en_ca"}
+vim.api.nvim_create_autocmd(
+  { "TermOpen" },
+  { pattern = "*", command = "setlocal nospell" }
+)
+vim.api.nvim_create_autocmd(
+  { "BufReadPost" },
+  { pattern = { "*.rs", "*.md", "*.toml" }, command = "setlocal spell" }
+)
+
 -- Install package manager
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
@@ -124,6 +136,23 @@ local lazy_plugins = {
       require("nvim-autopairs").setup {}
     end,
   },
+  {
+    "simrat39/rust-tools.nvim"
+  },
+  {
+    "saecki/crates.nvim",
+    event = { "BufRead Cargo.toml" },
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+        require('crates').setup()
+    end,
+  },
+  {
+    "nvim-telescope/telescope-ui-select.nvim"
+  },
+  {
+    "mfussenegger/nvim-dap"
+  },
 }
 require('lazy').setup(lazy_plugins , {})
 
@@ -165,6 +194,7 @@ require('telescope').setup {
   },
 }
 pcall(require('telescope').load_extension, 'fzf')
+require("telescope").load_extension("ui-select")
 
 -- [[ Configure Treesitter ]]
 require('nvim-treesitter.configs').setup {
@@ -244,7 +274,7 @@ local on_attach = function(_, bufnr)
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
   nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
   nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-  nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+  nmap('<leader>cr', vim.lsp.buf.rename, '[C]ode [R]ename')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
   -- nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
   -- nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
@@ -345,6 +375,7 @@ cmp.setup {
     end, { 'i', 's' }),
   },
   sources = {
+    { name = 'buffer' },
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
     { name = 'path' },
@@ -352,6 +383,69 @@ cmp.setup {
     { name = 'nvim_lua', keyword_length = 2 },
   },
 }
+
+-- [[ Configure Rust Tools ]]
+local rt = require("rust-tools")
+
+rt.setup({
+  tools = {
+    autoSetHints = true,
+    runnables = {
+      use_telescope = true,
+    },
+    debuggables = {
+      use_telescope = true,
+    },
+    inlay_hints = {
+      auto = false,
+      show_parameter_hints = true,
+      parameter_hints_prefix = "",
+      other_hints_prefix = "",
+    },
+    hover_actions = {
+      auto_focus = true,
+    },
+  },
+  -- dap = {
+  --   adapter = {
+  --     type = "executable",
+  --     command = "codelldb",
+  --     name = "rt_lldb",
+  --   },
+  -- },
+  server = {
+    standalone = true,
+    settings = {
+      ["rust-analyzer"] = {
+        check = {
+          allFeatures = true,
+          features = "all",
+        },
+        cargo = {
+          allFeatures = true,
+          features = "all",
+        },
+        checkOnSave = {
+          command = "check",
+          -- command = "clippy",
+        },
+      },
+    },
+    on_attach = function(x, bufnr)
+      vim.keymap.set("n", "<Leader>rg", rt.hover_actions.hover_actions, { desc = 'Rust Hover', buffer = bufnr })
+      vim.keymap.set("n", "<Leader>rm", rt.expand_macro.expand_macro, { desc = 'Expand [R]ust [M]acro', buffer = bufnr })
+      vim.keymap.set("n", "<Leader>rr", rt.runnables.runnables, { desc = '[R]ust [R]unnables', buffer = bufnr })
+      vim.keymap.set("n", "<Leader>rd", rt.debuggables.debuggables, { desc = '[R]ust [D]ebuggables', buffer = bufnr })
+      vim.keymap.set("n", "<Leader>rJ", rt.join_lines.join_lines, { desc = '[R]ust [J]oin Lines', buffer = bufnr })
+      vim.keymap.set("n", "<Leader>ri", rt.inlay_hints.enable, { desc = '[R]ust [I]nlay hints on', buffer = bufnr })
+      vim.keymap.set("n", "<Leader>rI", rt.inlay_hints.disable, { desc = '[R]ust [I]nlay hints off', buffer = bufnr })
+      vim.keymap.set("n", "<Leader>rk", ":RustMoveItemUp<cr>", { desc = '[R]ust Move Item Up', buffer = bufnr })
+      vim.keymap.set("n", "<Leader>rj", ":RustMoveItemDown<cr>", { desc = '[R]ust Move Item Down', buffer = bufnr })
+      vim.keymap.set("n", "<Leader>rf", ":!cargo fmt<cr>", { desc = '[R]ust [F]ormat', buffer = bufnr })
+      on_attach(x, bufnr)
+    end,
+  },
+})
 
 -- [[ Basic Keymaps ]]
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
@@ -361,7 +455,8 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-o>", "<C-o>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-i>", "<C-i>zz", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>x", ":Vexplore<cr>", { desc = 'E[X]plore', noremap = true, silent = true })
+vim.keymap.set("n", "<leader>x", ":Hexplore<cr>", { desc = 'E[X]plore', noremap = true, silent = true })
+vim.keymap.set("n", "<leader>t", ":belowright split<bar>terminal<cr>i", { desc = '[T]erminal', noremap = true, silent = true })
 -- Resize with arrows
 vim.keymap.set("n", "<A-Up>", ":resize +2<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<A-Down>", ":resize -2<CR>", { noremap = true, silent = true })
@@ -400,6 +495,8 @@ vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>ss', require('telescope.builtin').git_status, { desc = '[S]earch Git [S]tatus' })
 vim.keymap.set('n', '<leader>sb', require('telescope.builtin').git_branches, { desc = '[S]earch Git [B]ranches' })
+vim.keymap.set('n', '<leader>sc', require('telescope.builtin').git_commits, { desc = '[S]earch Git [C]ommits' })
+vim.keymap.set('n', '<leader>sC', require('telescope.builtin').git_bcommits, { desc = '[S]earch Git Buffer [C]ommits' })
 
 -- git signs
 vim.keymap.set('n', '<leader>gp', ":Gitsigns preview_hunk<cr>", { desc = '[G]it [P]review Hunk' })
