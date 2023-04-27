@@ -5,10 +5,22 @@ vim.wo.relativenumber = true
 -- Spelling configuration
 vim.opt.spell = false
 vim.opt.spelllang = {"en_us", "en_ca"}
+
+-- Autocommands
+-- Terminal
 vim.api.nvim_create_autocmd(
   { "TermOpen" },
   { pattern = "*", command = "setlocal nospell" }
 )
+vim.api.nvim_create_autocmd(
+  { "TermOpen" },
+  { pattern = "*", command = "startinsert" }
+)
+vim.api.nvim_create_autocmd(
+  { "BufWinEnter", "WinEnter" },
+  { pattern = "term://*", command = "startinsert" }
+)
+-- Source Code
 vim.api.nvim_create_autocmd(
   { "BufReadPost" },
   { pattern = { "*.rs", "*.md", "*.toml" }, command = "setlocal spell" }
@@ -198,7 +210,7 @@ require("telescope").load_extension("ui-select")
 
 -- [[ Configure Treesitter ]]
 require('nvim-treesitter.configs').setup {
-  ensure_installed = { 'lua', 'vim', 'toml', 'markdown', 'markdown_inline', 'json', 'yaml', 'rust' },
+  ensure_installed = { 'lua', 'vim', 'toml', 'markdown', 'markdown_inline', 'json', 'yaml', 'rust', 'c', 'go', 'zig', 'fish', 'bash', 'javascript', 'typescript' },
   auto_install = false,
   highlight = { enable = true },
   indent = { enable = true, disable = { 'python' } },
@@ -456,15 +468,15 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-o>", "<C-o>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-i>", "<C-i>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>x", ":Hexplore<cr>", { desc = 'E[X]plore', noremap = true, silent = true })
-vim.keymap.set("n", "<leader>t", ":belowright split<bar>terminal<cr>i", { desc = '[T]erminal', noremap = true, silent = true })
+vim.keymap.set("n", "<leader>t", ":belowright split<bar>terminal<cr>", { desc = '[T]erminal', noremap = true, silent = true })
 -- Resize with arrows
 vim.keymap.set("n", "<A-Up>", ":resize +2<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<A-Down>", ":resize -2<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<A-Left>", ":vertical resize +2<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<A-Right>", ":vertical resize -2<CR>", { noremap = true, silent = true })
 -- -- Navigate buffers
--- vim.keymap.set("n", "<S-l>", ":bnext<CR>", { noremap = true, silent = true })
--- vim.keymap.set("n", "<S-h>", ":bprevious<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<S-l>", ":bnext<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<S-h>", ":bprevious<CR>", { noremap = true, silent = true })
 -- Stay in indent mode
 vim.keymap.set("v", "<", "<gv", { noremap = true, silent = true })
 vim.keymap.set("v", ">", ">gv", { noremap = true, silent = true })
@@ -480,12 +492,7 @@ vim.keymap.set('n', '<leader>u', ":UndotreeToggle<cr>", { desc = '[U]ndo Tree' }
 -- telescope
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
-vim.keymap.set('n', '<leader>/', function()
-  require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-    winblend = 10,
-    previewer = false,
-  })
-end, { desc = '[/] Fuzzily search in current buffer' })
+vim.keymap.set('n', '<leader>/', require('telescope.builtin').current_buffer_fuzzy_find, { desc = '[/] Fuzzily search in current buffer' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').registers, { desc = '[S]earch [R]egisters' })
 vim.keymap.set('n', '<leader>sj', require('telescope.builtin').jumplist, { desc = '[S]earch [J]umplist' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
@@ -502,4 +509,4 @@ vim.keymap.set('n', '<leader>sC', require('telescope.builtin').git_bcommits, { d
 vim.keymap.set('n', '<leader>gp', ":Gitsigns preview_hunk<cr>", { desc = '[G]it [P]review Hunk' })
 vim.keymap.set('n', '<leader>gr', ":Gitsigns reset_hunk<cr>", { desc = '[G]it [R]eset Hunk' })
 vim.keymap.set('n', '<leader>gl', ":Gitsigns next_hunk<cr>", { desc = '[G]it Next Hunk' })
-vim.keymap.set('n', '<leader>gh', ":Gitsigns previous_hunk<cr>", { desc = '[G]it Previous Hunk' })
+vim.keymap.set('n', '<leader>gh', ":Gitsigns prev_hunk<cr>", { desc = '[G]it Previous Hunk' })
