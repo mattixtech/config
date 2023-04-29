@@ -4,7 +4,7 @@ vim.wo.relativenumber = true
 
 -- Spelling configuration
 vim.opt.spell = false
-vim.opt.spelllang = {"en_us", "en_ca"}
+vim.opt.spelllang = { "en_us", "en_ca" }
 
 -- Autocommands
 -- Terminal
@@ -45,7 +45,8 @@ local lazy_plugins = {
   'tpope/vim-sleuth',
   'mbbill/undotree',
   'kevinhwang91/nvim-bqf',
-  { -- LSP Configuration & Plugins
+  {
+    -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
       'williamboman/mason.nvim',
@@ -54,11 +55,13 @@ local lazy_plugins = {
       'folke/neodev.nvim',
     },
   },
-  { -- Autocompletion
+  {
+    -- Autocompletion
     'hrsh7th/nvim-cmp',
-    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-nvim-lsp-signature-help', 'hrsh7th/cmp-nvim-lua', 'hrsh7th/cmp-path' },
+    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-nvim-lsp-signature-help', 'hrsh7th/cmp-nvim-lua', 'hrsh7th/cmp-path' },
   },
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',          opts = {} },
   {
     'lewis6991/gitsigns.nvim',
     opts = {
@@ -89,8 +92,8 @@ local lazy_plugins = {
         section_separators = '',
       },
       sections = {
-        lualine_a = {'mode'},
-        lualine_b = {'branch', 'diff', 'diagnostics'},
+        lualine_a = { 'mode' },
+        lualine_b = { 'branch', 'diff', 'diagnostics' },
         lualine_c = {
           {
             'filename',
@@ -98,9 +101,9 @@ local lazy_plugins = {
             shorting_target = 60,
           },
         },
-        lualine_x = {'filetype'},
-        lualine_y = {'progress'},
-        lualine_z = {'location'}
+        lualine_x = { 'filetype' },
+        lualine_y = { 'progress' },
+        lualine_z = { 'location' }
       },
     },
   },
@@ -111,7 +114,7 @@ local lazy_plugins = {
       show_trailing_blankline_indent = false,
     },
   },
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim',         opts = {} },
   { 'nvim-telescope/telescope.nvim', version = '*', dependencies = { 'nvim-lua/plenary.nvim' } },
   -- Fuzzy Finder Algorithm which requires local dependencies to be built.
   -- Only load if `make` is available. Make sure you have the system
@@ -139,7 +142,7 @@ local lazy_plugins = {
     version = "*",
     event = "VeryLazy",
     config = function()
-        require("nvim-surround").setup({})
+      require("nvim-surround").setup({})
     end
   },
   {
@@ -156,7 +159,7 @@ local lazy_plugins = {
     event = { "BufRead Cargo.toml" },
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
-        require('crates').setup()
+      require('crates').setup()
     end,
   },
   {
@@ -166,7 +169,7 @@ local lazy_plugins = {
     "mfussenegger/nvim-dap"
   },
 }
-require('lazy').setup(lazy_plugins , {})
+require('lazy').setup(lazy_plugins, {})
 
 -- [[ Setting options ]]
 vim.o.hlsearch = false
@@ -212,7 +215,8 @@ require("telescope").load_extension("ui-select")
 
 -- [[ Configure Treesitter ]]
 require('nvim-treesitter.configs').setup {
-  ensure_installed = { 'lua', 'vim', 'toml', 'markdown', 'markdown_inline', 'json', 'yaml', 'rust', 'c', 'go', 'zig', 'fish', 'bash', 'javascript', 'typescript' },
+  ensure_installed = { 'lua', 'vim', 'toml', 'markdown', 'markdown_inline', 'json', 'yaml', 'rust', 'c', 'go', 'zig',
+    'fish', 'bash', 'javascript', 'typescript' },
   auto_install = false,
   highlight = { enable = true },
   indent = { enable = true, disable = { 'python' } },
@@ -333,21 +337,21 @@ mason_lspconfig.setup_handlers {
 
 -- diag
 vim.diagnostic.config({
-    virtual_text = {
-      severity = { min = vim.diagnostic.severity.ERROR }
-    },
-    signs = { min = vim.diagnostic.severity.INFO },
-    update_in_insert = false,
-    underline = { 
-      severity = { min = vim.diagnostic.severity.WARN }
-    },
-    severity_sort = true,
-    float = {
-        border = 'rounded',
-        source = 'always',
-        header = '',
-        prefix = '',
-    },
+  virtual_text = {
+    severity = { min = vim.diagnostic.severity.ERROR }
+  },
+  signs = { min = vim.diagnostic.severity.INFO },
+  update_in_insert = false,
+  underline = {
+    severity = { min = vim.diagnostic.severity.WARN }
+  },
+  severity_sort = true,
+  float = {
+    border = 'rounded',
+    source = 'always',
+    header = '',
+    prefix = '',
+  },
 })
 
 -- nvim-cmp setup
@@ -392,7 +396,7 @@ cmp.setup {
     { name = 'nvim_lsp_signature_help' },
     { name = 'buffer' },
     { name = 'luasnip' },
-    { name = 'nvim_lua', keyword_length = 2 },
+    { name = 'nvim_lua',               keyword_length = 2 },
     { name = 'path' },
   },
 }
@@ -469,7 +473,8 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-o>", "<C-o>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-i>", "<C-i>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>x", ":Hexplore<cr>", { desc = 'E[X]plore', noremap = true, silent = true })
-vim.keymap.set("n", "<leader>t", ":belowright split<bar>terminal<cr>", { desc = '[T]erminal', noremap = true, silent = true })
+vim.keymap.set("n", "<leader>t", ":belowright split<bar>terminal<cr>",
+{ desc = '[T]erminal', noremap = true, silent = true })
 -- Resize with arrows
 vim.keymap.set("n", "<A-Up>", ":resize +2<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<A-Down>", ":resize -2<CR>", { noremap = true, silent = true })
@@ -493,7 +498,8 @@ vim.keymap.set('n', '<leader>u', ":UndotreeToggle<cr>", { desc = '[U]ndo Tree' }
 -- telescope
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
-vim.keymap.set('n', '<leader>/', require('telescope.builtin').current_buffer_fuzzy_find, { desc = '[/] Fuzzily search in current buffer' })
+vim.keymap.set('n', '<leader>/', require('telescope.builtin').current_buffer_fuzzy_find,
+{ desc = '[/] Fuzzily search in current buffer' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').registers, { desc = '[S]earch [R]egisters' })
 vim.keymap.set('n', '<leader>sj', require('telescope.builtin').jumplist, { desc = '[S]earch [J]umplist' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
