@@ -181,8 +181,10 @@ vim.wo.signcolumn = 'yes'
 vim.o.updatetime = 250
 vim.o.timeout = true
 vim.o.timeoutlen = 300
-vim.o.completeopt = 'menuone,noselect'
+vim.o.completeopt = 'menu,menuone,noselect'
 vim.o.termguicolors = true
+vim.o.scrolloff = 3
+vim.o.sidscrolloff = 3
 
 -- [[ Highlight on yank ]]
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
@@ -288,11 +290,6 @@ local on_attach = function(_, bufnr)
   nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
   nmap('<leader>cr', vim.lsp.buf.rename, '[C]ode [R]ename')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-  -- nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  -- nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  -- nmap('<leader>wl', function()
-  --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  -- end, '[W]orkspace [L]ist Folders')
 
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
   nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
@@ -336,11 +333,15 @@ mason_lspconfig.setup_handlers {
 
 -- diag
 vim.diagnostic.config({
-    virtual_text = false,
-    signs = true,
-    update_in_insert = true,
-    underline = true,
-    severity_sort = false,
+    virtual_text = {
+      severity = { min = vim.diagnostic.severity.ERROR }
+    },
+    signs = { min = vim.diagnostic.severity.INFO },
+    update_in_insert = false,
+    underline = { 
+      severity = { min = vim.diagnostic.severity.WARN }
+    },
+    severity_sort = true,
     float = {
         border = 'rounded',
         source = 'always',
@@ -365,7 +366,7 @@ cmp.setup {
     ['<C-Space>'] = cmp.mapping.complete {},
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
+      select = false,
     },
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
@@ -387,12 +388,12 @@ cmp.setup {
     end, { 'i', 's' }),
   },
   sources = {
-    { name = 'buffer' },
     { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-    { name = 'path' },
     { name = 'nvim_lsp_signature_help' },
+    { name = 'buffer' },
+    { name = 'luasnip' },
     { name = 'nvim_lua', keyword_length = 2 },
+    { name = 'path' },
   },
 }
 
