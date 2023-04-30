@@ -472,9 +472,11 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-o>", "<C-o>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-i>", "<C-i>zz", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>x", ":Hexplore<cr>", { desc = 'E[X]plore', noremap = true, silent = true })
-vim.keymap.set("n", "<leader>t", ":belowright split<bar>terminal<cr>",
-{ desc = '[T]erminal', noremap = true, silent = true })
+vim.keymap.set("n", "<leader>x", "<C-w><C-s>:Explore<CR>", { desc = 'E[X]plore Split', noremap = true, silent = true })
+vim.keymap.set("n", "<leader>X", ":Explore<CR>", { desc = 'E[X]plore', noremap = true, silent = true })
+vim.keymap.set("n", "<leader>t", "<C-w><C-s>:terminal<CR>", { desc = '[T]erminal Split', noremap = true, silent = true })
+vim.keymap.set("n", "<leader>T", ":terminal<CR>", { desc = '[T]erminal', noremap = true, silent = true })
+vim.keymap.set("n", "<leader>b", ":b#<CR>", { desc = 'Switch [B]uffer', noremap = true, silent = true })
 -- Resize with arrows
 vim.keymap.set("n", "<A-Up>", ":resize +2<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<A-Down>", ":resize -2<CR>", { noremap = true, silent = true })
@@ -499,7 +501,7 @@ vim.keymap.set('n', '<leader>u', ":UndotreeToggle<cr>", { desc = '[U]ndo Tree' }
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
 vim.keymap.set('n', '<leader>/', require('telescope.builtin').current_buffer_fuzzy_find,
-{ desc = '[/] Fuzzily search in current buffer' })
+  { desc = '[/] Fuzzily search in current buffer' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').registers, { desc = '[S]earch [R]egisters' })
 vim.keymap.set('n', '<leader>sj', require('telescope.builtin').jumplist, { desc = '[S]earch [J]umplist' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
