@@ -493,7 +493,7 @@ rt.setup({
       vim.keymap.set("n", "<Leader>rI", rt.inlay_hints.disable, { desc = '[R]ust [I]nlay hints off', buffer = bufnr })
       vim.keymap.set("n", "<Leader>rk", ":RustMoveItemUp<cr>", { desc = '[R]ust Move Item Up', buffer = bufnr })
       vim.keymap.set("n", "<Leader>rj", ":RustMoveItemDown<cr>", { desc = '[R]ust Move Item Down', buffer = bufnr })
-      vim.keymap.set("n", "<Leader>rf", ":!cargo fmt<cr>", { desc = '[R]ust [F]ormat', buffer = bufnr })
+      vim.keymap.set("n", "<Leader>rf", ":!cargo fmt --quiet<cr>", { desc = '[R]ust [F]ormat', buffer = bufnr })
       on_attach(x, bufnr)
     end,
   },

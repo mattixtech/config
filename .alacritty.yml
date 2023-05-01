@@ -17,6 +17,10 @@ window:
 
   # Allow terminal applications to change Alacritty's window title.
   dynamic_title: false
+  dynamic_cursor_color: true
+  cursor:
+    style: Block
+  insert_mode_cursor_style: Line
 
 scrolling:
   # Maximum number of lines in the scrollback buffer.
