@@ -364,9 +364,10 @@ cmp.setup {
       luasnip.lsp_expand(args.body)
     end,
   },
+  preselect = 'none',
   mapping = cmp.mapping.preset.insert {
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-u>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete {},
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
@@ -402,8 +403,35 @@ cmp.setup {
 }
 
 -- [[ Configure Rust Tools ]]
-local rt = require("rust-tools")
+--
+-- Filter only the current workspace for diagnostics
+local function ensure_uri_scheme(uri)
+  if not vim.startswith(uri, "file://") then
+    return "file://" .. uri
+  end
+  return uri
+end
 
+local function is_in_workspace(uri)
+  uri = ensure_uri_scheme(uri)
+  local path = vim.uri_to_fname(uri)
+  local workspace_dir = vim.fn.getcwd()
+
+  return vim.startswith(path, workspace_dir)
+end
+
+local function filter_diagnostics(diagnostics)
+  local filtered_diagnostics = {}
+  for _, diagnostic in ipairs(diagnostics) do
+    if is_in_workspace(diagnostic.source) then
+      table.insert(filtered_diagnostics, diagnostic)
+    end
+  end
+  return filtered_diagnostics
+end
+
+local rt = require("rust-tools")
+local lspconfig = require('lspconfig')
 rt.setup({
   tools = {
     autoSetHints = true,
@@ -431,6 +459,14 @@ rt.setup({
   --   },
   -- },
   server = {
+    root_dir = function(startpath)
+      local startpath_uri = vim.uri_from_fname(startpath)
+      if not is_in_workspace(startpath) then
+        return nil
+      end
+
+      return lspconfig.util.root_pattern("Cargo.toml", "rust-project.json")(startpath)
+    end,
     standalone = true,
     settings = {
       ["rust-analyzer"] = {
@@ -444,7 +480,6 @@ rt.setup({
         },
         checkOnSave = {
           command = "check",
-          -- command = "clippy",
         },
       },
     },
