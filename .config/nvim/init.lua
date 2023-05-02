@@ -58,8 +58,16 @@ local lazy_plugins = {
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
-    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'hrsh7th/cmp-buffer',
-      'hrsh7th/cmp-nvim-lsp-signature-help', 'hrsh7th/cmp-nvim-lua', 'hrsh7th/cmp-path' },
+    dependencies = {
+      'hrsh7th/cmp-nvim-lsp',
+      'L3MON4D3/LuaSnip',
+      -- 'saadparwaiz1/cmp_luasnip',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-nvim-lsp-signature-help',
+      'hrsh7th/cmp-nvim-lua',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-cmdline',
+    },
   },
   { 'folke/which-key.nvim',          opts = {} },
   {
@@ -165,9 +173,7 @@ local lazy_plugins = {
   {
     "nvim-telescope/telescope-ui-select.nvim"
   },
-  {
-    "mfussenegger/nvim-dap"
-  },
+  -- { "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
 }
 require('lazy').setup(lazy_plugins, {})
 
@@ -396,11 +402,27 @@ cmp.setup {
     { name = 'nvim_lsp' },
     { name = 'nvim_lsp_signature_help' },
     { name = 'buffer' },
-    { name = 'luasnip' },
-    { name = 'nvim_lua',               keyword_length = 2 },
-    { name = 'path' },
+    -- { name = 'luasnip' },
+    -- { name = 'nvim_lua',               keyword_length = 2 },
+    -- { name = 'path' },
+    -- { name = 'cmdline' },
   },
 }
+cmp.setup.cmdline({ '/', '?' }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' }
+  }
+})
+
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
+})
 
 -- [[ Configure Rust Tools ]]
 --
@@ -487,7 +509,7 @@ rt.setup({
       vim.keymap.set("n", "<Leader>rg", rt.hover_actions.hover_actions, { desc = 'Rust Hover', buffer = bufnr })
       vim.keymap.set("n", "<Leader>rm", rt.expand_macro.expand_macro, { desc = 'Expand [R]ust [M]acro', buffer = bufnr })
       vim.keymap.set("n", "<Leader>rr", rt.runnables.runnables, { desc = '[R]ust [R]unnables', buffer = bufnr })
-      vim.keymap.set("n", "<Leader>rd", rt.debuggables.debuggables, { desc = '[R]ust [D]ebuggables', buffer = bufnr })
+      -- vim.keymap.set("n", "<Leader>rd", rt.debuggables.debuggables, { desc = '[R]ust [D]ebuggables', buffer = bufnr })
       vim.keymap.set("n", "<Leader>rJ", rt.join_lines.join_lines, { desc = '[R]ust [J]oin Lines', buffer = bufnr })
       vim.keymap.set("n", "<Leader>ri", rt.inlay_hints.enable, { desc = '[R]ust [I]nlay hints on', buffer = bufnr })
       vim.keymap.set("n", "<Leader>rI", rt.inlay_hints.disable, { desc = '[R]ust [I]nlay hints off', buffer = bufnr })
@@ -498,6 +520,35 @@ rt.setup({
     end,
   },
 })
+
+-- [Debugging Setup]
+-- local dap = require("dap")
+-- local mason_registry = require("mason-registry")
+-- local codelldb_root = mason_registry.get_package("codelldb"):get_install_path() .. "/extension/"
+-- local codelldb_path = codelldb_root .. "adapter/codelldb"
+-- local liblldb_path = codelldb_root .. "lldb/lib/liblldb.so"
+-- require('dap').adapters.lldb = {
+--   type = 'executable',
+--   command = codelldb_path,
+--   name = "lldb"
+-- }
+-- require('dap').configurations.rust = {
+--   {
+--     name = "Launch",
+--     type = "lldb",
+--     request = "launch",
+--     program = function()
+--       return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/target/debug/', 'file')
+--     end,
+--     cwd = "${workspaceFolder}",
+--     stopOnEntry = false,
+--     args = {},
+--     runInTerminal = false,
+--   },
+-- }
+-- require("dapui").setup()
+--
+-- dap.adapters.rust = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path)
 
 -- [[ Basic Keymaps ]]
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
@@ -523,12 +574,10 @@ vim.keymap.set("n", "<S-h>", ":bprevious<CR>", { noremap = true, silent = true }
 -- Stay in indent mode
 vim.keymap.set("v", "<", "<gv", { noremap = true, silent = true })
 vim.keymap.set("v", ">", ">gv", { noremap = true, silent = true })
-
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic message" })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Go to next diagnostic message" })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
-
 -- Plugin keymaps
 vim.keymap.set('t', "<Esc>", "<C-\\><C-n>")
 vim.keymap.set('n', '<leader>u', ":UndotreeToggle<cr>", { desc = '[U]ndo Tree' })
@@ -548,7 +597,6 @@ vim.keymap.set('n', '<leader>ss', require('telescope.builtin').git_status, { des
 vim.keymap.set('n', '<leader>sb', require('telescope.builtin').git_branches, { desc = '[S]earch Git [B]ranches' })
 vim.keymap.set('n', '<leader>sc', require('telescope.builtin').git_commits, { desc = '[S]earch Git [C]ommits' })
 vim.keymap.set('n', '<leader>sC', require('telescope.builtin').git_bcommits, { desc = '[S]earch Git Buffer [C]ommits' })
-
 -- git signs
 vim.keymap.set('n', '<leader>gp', ":Gitsigns preview_hunk<cr>", { desc = '[G]it [P]review Hunk' })
 vim.keymap.set('n', '<leader>gr', ":Gitsigns reset_hunk<cr>", { desc = '[G]it [R]eset Hunk' })
