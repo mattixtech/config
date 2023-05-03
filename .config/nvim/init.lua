@@ -32,6 +32,15 @@ vim.api.nvim_create_autocmd(
   { "BufReadPost" },
   { pattern = { "*.rs", "*.md", "*.toml" }, command = "setlocal spell" }
 )
+-- Toggle cursorline when swapping windows
+vim.api.nvim_create_autocmd(
+  { "WinLeave" },
+  { pattern = "*", command = "set nocursorline" }
+)
+vim.api.nvim_create_autocmd(
+  { "WinEnter" },
+  { pattern = "*", command = "set cursorline" }
+)
 
 -- Install package manager
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -190,8 +199,8 @@ require('lualine').setup { options = { theme = modified_catppuccin } }
 require("catppuccin").setup {
   dim_inactive = {
     enabled = true,
-    shade = "dark",
-    percentage = 0.5,
+    -- shade = "dark",
+    -- percentage = 0.5,
   },
   integrations = {
     indent_blankline = {
