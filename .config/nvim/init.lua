@@ -1,10 +1,17 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.wo.relativenumber = true
+vim.wo.cursorline = true
 
 -- Spelling configuration
 vim.opt.spell = false
 vim.opt.spelllang = { "en_us", "en_ca" }
+
+-- Netrw confifguration
+vim.g.netrw_mkdir = 1
+vim.g.netrw_liststyle = 3
+vim.g.netrw_banner = 0
+vim.g.netrw_bufsettings = 'noma nomod relativenumber nowrap ro nobl'
 
 -- Autocommands
 -- Terminal
@@ -20,7 +27,7 @@ vim.api.nvim_create_autocmd(
   { "BufWinEnter", "WinEnter" },
   { pattern = "term://*", command = "startinsert" }
 )
--- Source Code
+-- Spelling in source code
 vim.api.nvim_create_autocmd(
   { "BufReadPost" },
   { pattern = { "*.rs", "*.md", "*.toml" }, command = "setlocal spell" }
@@ -83,11 +90,11 @@ local lazy_plugins = {
     },
   },
   {
-    'Mofiqul/dracula.nvim',
+    'catppuccin/nvim',
+    name = "catppuccin",
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'dracula'
-      vim.g.dracula_lualine_bg_color = "#44475a"
+      vim.cmd.colorscheme 'catppuccin'
     end,
   },
   {
@@ -95,7 +102,7 @@ local lazy_plugins = {
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'dracula',
+        theme = 'catppuccin',
         component_separators = '',
         section_separators = '',
       },
@@ -173,9 +180,41 @@ local lazy_plugins = {
   {
     "nvim-telescope/telescope-ui-select.nvim"
   },
-  -- { "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
 }
 require('lazy').setup(lazy_plugins, {})
+
+-- [[ Theme Setup ]]
+local modified_catppuccin = require('lualine.themes.catppuccin')
+modified_catppuccin.normal.c.bg = 'None'
+require('lualine').setup { options = { theme = modified_catppuccin } }
+require("catppuccin").setup {
+  dim_inactive = {
+    enabled = true,
+    shade = "dark",
+    percentage = 0.5,
+  },
+  integrations = {
+    indent_blankline = {
+      enabled = true,
+      colored_indent_levels = false,
+    },
+    native_lsp = {
+      enabled = true,
+      virtual_text = {
+        errors = { "italic" },
+        hints = { "italic" },
+        warnings = { "italic" },
+        information = { "italic" },
+      },
+      underlines = {
+        errors = { "underline" },
+        hints = { "underline" },
+        warnings = { "underline" },
+        information = { "underline" },
+      },
+    },
+  },
+}
 
 -- [[ Setting options ]]
 vim.o.hlsearch = false
@@ -402,10 +441,6 @@ cmp.setup {
     { name = 'nvim_lsp' },
     { name = 'nvim_lsp_signature_help' },
     { name = 'buffer' },
-    -- { name = 'luasnip' },
-    -- { name = 'nvim_lua',               keyword_length = 2 },
-    -- { name = 'path' },
-    -- { name = 'cmdline' },
   },
 }
 cmp.setup.cmdline({ '/', '?' }, {
@@ -473,13 +508,6 @@ rt.setup({
       auto_focus = true,
     },
   },
-  -- dap = {
-  --   adapter = {
-  --     type = "executable",
-  --     command = "codelldb",
-  --     name = "rt_lldb",
-  --   },
-  -- },
   server = {
     root_dir = function(startpath)
       local startpath_uri = vim.uri_from_fname(startpath)
@@ -509,7 +537,6 @@ rt.setup({
       vim.keymap.set("n", "<Leader>rg", rt.hover_actions.hover_actions, { desc = 'Rust Hover', buffer = bufnr })
       vim.keymap.set("n", "<Leader>rm", rt.expand_macro.expand_macro, { desc = 'Expand [R]ust [M]acro', buffer = bufnr })
       vim.keymap.set("n", "<Leader>rr", rt.runnables.runnables, { desc = '[R]ust [R]unnables', buffer = bufnr })
-      -- vim.keymap.set("n", "<Leader>rd", rt.debuggables.debuggables, { desc = '[R]ust [D]ebuggables', buffer = bufnr })
       vim.keymap.set("n", "<Leader>rJ", rt.join_lines.join_lines, { desc = '[R]ust [J]oin Lines', buffer = bufnr })
       vim.keymap.set("n", "<Leader>ri", rt.inlay_hints.enable, { desc = '[R]ust [I]nlay hints on', buffer = bufnr })
       vim.keymap.set("n", "<Leader>rI", rt.inlay_hints.disable, { desc = '[R]ust [I]nlay hints off', buffer = bufnr })
@@ -520,35 +547,6 @@ rt.setup({
     end,
   },
 })
-
--- [Debugging Setup]
--- local dap = require("dap")
--- local mason_registry = require("mason-registry")
--- local codelldb_root = mason_registry.get_package("codelldb"):get_install_path() .. "/extension/"
--- local codelldb_path = codelldb_root .. "adapter/codelldb"
--- local liblldb_path = codelldb_root .. "lldb/lib/liblldb.so"
--- require('dap').adapters.lldb = {
---   type = 'executable',
---   command = codelldb_path,
---   name = "lldb"
--- }
--- require('dap').configurations.rust = {
---   {
---     name = "Launch",
---     type = "lldb",
---     request = "launch",
---     program = function()
---       return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/target/debug/', 'file')
---     end,
---     cwd = "${workspaceFolder}",
---     stopOnEntry = false,
---     args = {},
---     runInTerminal = false,
---   },
--- }
--- require("dapui").setup()
---
--- dap.adapters.rust = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path)
 
 -- [[ Basic Keymaps ]]
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
